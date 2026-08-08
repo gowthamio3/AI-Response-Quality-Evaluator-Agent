@@ -1,0 +1,82 @@
+[
+  {
+    "question": "What is Artificial Intelligence?",
+    "answer": "Artificial Intelligence (AI) is the simulation of human intelligence by machines that can learn, reason, and solve problems."
+  },
+  {
+    "question": "What is Machine Learning?",
+    "answer": "Machine Learning is a branch of Artificial Intelligence that enables computers to learn from data without being explicitly programmed."
+  },
+  {
+    "question": "What is Deep Learning?",
+    "answer": "Deep Learning is a subset of Machine Learning that uses neural networks with multiple layers."
+  },
+  {
+    "question": "What is Natural Language Processing?",
+    "answer": "Natural Language Processing (NLP) enables computers to understand, interpret, and generate human language."
+  },
+  {
+    "question": "What is a Large Language Model?",
+    "answer": "A Large Language Model (LLM) is an AI model trained on massive amounts of text to understand and generate human language."
+  },
+  {
+    "question": "What is Retrieval-Augmented Generation?",
+    "answer": "Retrieval-Augmented Generation (RAG) combines information retrieval with language generation to produce more accurate responses."
+  },
+  {
+    "question": "What is a Vector Database?",
+    "answer": "A vector database stores vector embeddings and enables fast similarity search."
+  },
+  {
+    "question": "What are Embeddings?",
+    "answer": "Embeddings are numerical vector representations of text that capture semantic meaning."
+  },
+  {
+    "question": "What is FAISS?",
+    "answer": "FAISS is a library developed by Meta for efficient similarity search and clustering of dense vectors."
+  },
+  {
+    "question": "What is Hallucination in AI?",
+    "answer": "Hallucination occurs when an AI model generates information that is false or unsupported by facts."
+  },
+  {
+    "question": "What is Prompt Engineering?",
+    "answer": "Prompt Engineering is the practice of designing effective prompts to improve AI-generated responses."
+  },
+  {
+    "question": "What is Python?",
+    "answer": "Python is a high-level programming language widely used in Artificial Intelligence, Machine Learning, and web development."
+  },
+  {
+    "question": "What is TensorFlow?",
+    "answer": "TensorFlow is an open-source machine learning framework developed by Google."
+  },
+  {
+    "question": "What is PyTorch?",
+    "answer": "PyTorch is an open-source deep learning framework developed by Meta AI."
+  },
+  {
+    "question": "What is supervised learning?",
+    "answer": "Supervised learning is a machine learning technique that learns from labeled training data."
+  },
+  {
+    "question": "What is unsupervised learning?",
+    "answer": "Unsupervised learning finds hidden patterns in unlabeled data."
+  },
+  {
+    "question": "What is reinforcement learning?",
+    "answer": "Reinforcement learning trains an agent to make decisions using rewards and penalties."
+  },
+  {
+    "question": "What is a Transformer model?",
+    "answer": "A Transformer is a neural network architecture that uses self-attention to process sequential data."
+  },
+  {
+    "question": "What is tokenization?",
+    "answer": "Tokenization is the process of splitting text into smaller units called tokens."
+  },
+  {
+    "question": "Why is AI evaluation important?",
+    "answer": "AI evaluation measures the accuracy, relevance, completeness, and reliability of AI-generated responses."
+  }
+]
