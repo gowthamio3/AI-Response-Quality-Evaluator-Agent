@@ -1,4 +1,8 @@
 streamlit
+groq
+langchain
+langchain-community
+langchain-groq
 datasets
 sentence-transformers
 faiss-cpu
@@ -6,3 +10,9 @@ scikit-learn
 numpy
 pandas
 torch
+matplotlib
+reportlab
+python-dotenv
+pytest
+ragas
+trulens-eval

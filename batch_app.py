@@ -1,5 +1,10 @@
 import streamlit as st
 import pandas as pd
+from score_parser import (
+    extract_score,
+    extract_verdict,
+    extract_overall_score
+)
 
 from agents.relevance_agent import evaluate_relevance
 from agents.accuracy_agent import evaluate_accuracy
@@ -39,13 +44,15 @@ if csv_file is not None:
 
     df = pd.read_csv(csv_file)
 
+
     st.subheader("📄 Uploaded CSV")
     st.dataframe(df, use_container_width=True)
 
     required_columns = [
         "Question",
         "AI_Response",
-        "Reference Answer"
+        "Reference Answer",
+
     ]
 
     if not all(col in df.columns for col in required_columns):
@@ -72,6 +79,7 @@ if csv_file is not None:
                 question = row["Question"]
                 ai_response = row["AI_Response"]
                 reference = row["Reference Answer"]
+
 
                 relevance = evaluate_relevance(
                     question,
@@ -103,21 +111,60 @@ if csv_file is not None:
                     hallucination
                 )
 
+                # ---------------------------------------------------
+                # Extract Structured Scores
+                # ---------------------------------------------------
+
+                relevance_score = extract_score(
+                    relevance,
+                    "Relevance"
+                )
+
+                accuracy_score = extract_score(
+                    accuracy,
+                    "Accuracy"
+                )
+
+                hallucination_score = extract_score(
+                    hallucination,
+                    "Hallucination"
+                )
+
+                completeness_score = extract_score(
+                    completeness,
+                    "Completeness"
+                )
+
+                overall_score = extract_overall_score(
+                    verdict
+                )
+
+                final_verdict = extract_verdict(
+                    verdict
+                )
+
+                # ---------------------------------------------------
+                # Store Structured Evaluation Result
+                # ---------------------------------------------------
+
                 results.append({
 
                     "Question": question,
                     "AI Response": ai_response,
 
-                    "Relevance": relevance.split("Reason")[0].replace("Score:", "").strip(),
-                    "Accuracy": accuracy.split("Reason")[0].replace("Score:", "").strip(),
-                    "Hallucination": hallucination.split("Reason")[0].replace("Score:", "").strip(),
-                    "Completeness": completeness.split("Reason")[0].replace("Score:", "").strip(),
-                    "Verdict": verdict,
+                    "Relevance": relevance_score,
+                    "Accuracy": accuracy_score,
+                    "Hallucination": hallucination_score,
+                    "Completeness": completeness_score,
+
+                    "Overall Score": overall_score,
+                    "Verdict": final_verdict,
 
                     "Relevance Details": relevance,
                     "Accuracy Details": accuracy,
                     "Hallucination Details": hallucination,
-                    "Completeness Details": completeness
+                    "Completeness Details": completeness,
+                    "Verdict Details": verdict
 
                 })
 
@@ -126,6 +173,11 @@ if csv_file is not None:
             st.success(f"✅ Successfully evaluated {len(results)} responses.")
 
             result_df = pd.DataFrame(results)
+            # Save structured results for Milestone 4 Dashboard
+            result_df.to_csv(
+                "evaluation_results.csv",
+                index=False
+            )
 
             display_df = result_df[
                 [
@@ -134,6 +186,7 @@ if csv_file is not None:
                     "Accuracy",
                     "Hallucination",
                     "Completeness",
+                    "Overall Score",
                     "Verdict"
                 ]
             ]
@@ -176,26 +229,115 @@ if csv_file is not None:
 
             for i, row in enumerate(results):
 
-                with st.expander(f"📌 Question {i+1}: {row['Question']}"):
+                with st.expander(f"📌 Question {i + 1}: {row['Question']}"):
 
                     st.write("### 🤖 AI Response")
                     st.write(row["AI Response"])
 
+                    # ---------------------------------------------------
+                    # Relevance
+                    # ---------------------------------------------------
+
                     st.write("### 🎯 Relevance")
-                    st.write(row["Relevance Details"])
+
+                    relevance_score = extract_score(
+                        row["Relevance Details"],
+                        "Relevance"
+                    )
+
+                    relevance_reason = row["Relevance Details"].split(
+                        "Reason:", 1
+                    )[-1].strip()
+
+                    st.write(f"**Score:** {relevance_score}/10")
+                    st.write(f"**Reason:** {relevance_reason}")
+
+                    # ---------------------------------------------------
+                    # Accuracy
+                    # ---------------------------------------------------
 
                     st.write("### 🎯 Accuracy")
-                    st.write(row["Accuracy Details"])
+
+                    accuracy_score = extract_score(
+                        row["Accuracy Details"],
+                        "Accuracy"
+                    )
+
+                    accuracy_reason = row["Accuracy Details"].split(
+                        "Reason:", 1
+                    )[-1].strip()
+
+                    st.write(f"**Score:** {accuracy_score}/10")
+                    st.write(f"**Reason:** {accuracy_reason}")
+
+                    # ---------------------------------------------------
+                    # Hallucination
+                    # ---------------------------------------------------
 
                     st.write("### 🚨 Hallucination")
-                    st.write(row["Hallucination Details"])
+
+                    hallucination_score = extract_score(
+                        row["Hallucination Details"],
+                        "Hallucination"
+                    )
+
+                    hallucination_reason = row["Hallucination Details"].split(
+                        "Reason:", 1
+                    )[-1].strip()
+
+                    st.write(f"**Score:** {hallucination_score}/10")
+                    st.write(f"**Reason:** {hallucination_reason}")
+
+                    # ---------------------------------------------------
+                    # Completeness
+                    # ---------------------------------------------------
 
                     st.write("### 📄 Completeness")
-                    st.write(row["Completeness Details"])
+
+                    completeness_score = extract_score(
+                        row["Completeness Details"],
+                        "Completeness"
+                    )
+
+                    completeness_reason = row["Completeness Details"].split(
+                        "Reason:", 1
+                    )[1].split("Missing Points:", 1)[0].strip()
+
+                    st.write(f"**Score:** {completeness_score}/10")
+                    st.write(f"**Reason:** {completeness_reason}")
+
+                    # ---------------------------------------------------
+                    # Overall Score
+                    # ---------------------------------------------------
+
+                    st.write("### 🏆 Overall Score")
+                    st.write(f"**{row['Overall Score']}/10**")
+
+                    # ---------------------------------------------------
+                    # Verdict
+                    # ---------------------------------------------------
 
                     st.write("### 🏆 Verdict")
-                    st.write(row["Verdict"])
+                    st.write(f"**{row['Verdict']}**")
 
+                    # ---------------------------------------------------
+                    # Verdict Details
+                    # ---------------------------------------------------
+
+                    st.write("### 📝 Verdict Details")
+
+                    verdict_details = row["Verdict Details"]
+
+                    if "Consolidated Reasoning:" in verdict_details:
+
+                        reasoning = verdict_details.split(
+                            "Consolidated Reasoning:", 1
+                        )[1].strip()
+
+                        st.write(f"**Reason:** {reasoning}")
+
+                    else:
+                        st.write(verdict_details)
             st.divider()
 
             # ---------------------------------------------------
