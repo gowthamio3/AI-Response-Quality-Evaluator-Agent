@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import time
 
 from score_parser import (
     extract_score,
@@ -147,6 +148,7 @@ def show_batch_evaluation():
                         "Completeness Details": completeness,
                         "Verdict Details": verdict
                     })
+                    time.sleep(2)
 
                     progress.progress(
                         int((i + 1) * 100 / total_rows)
